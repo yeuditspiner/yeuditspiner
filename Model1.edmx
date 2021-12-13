@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="YeuditTablePlaceMentModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ClassTbl">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="int" Nullable="false" />
+          <Property Name="ClassNmae" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="StudentTbl">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="nchar" MaxLength="20" />
+          <Property Name="FirstName" Type="nchar" MaxLength="20" />
+          <Property Name="Chatter" Type="int" />
+          <Property Name="AdviceableLine" Type="int" />
+          <Property Name="Coulnm" Type="int" />
+          <Property Name="Line" Type="int" />
+          <Property Name="ClassID" Type="int" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TypicalTbl">
+          <Key>
+            <PropertyRef Name="TypicalID" />
+          </Key>
+          <Property Name="TypicalID" Type="int" Nullable="false" />
+          <Property Name="DetailTypical" Type="nchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TypicalToStudent_Tbl">
+          <Key>
+            <PropertyRef Name="TypicalToStudentID" />
+          </Key>
+          <Property Name="TypicalToStudentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StudentID" Type="int" />
+          <Property Name="TypicalID" Type="int" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'YeuditTablePlaceMent.dbo.TypicalToStudentTbl' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="TypicalToStudentTbl">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="TypicalID" />
+          </Key>
+          <Property Name="StudentID" Type="int" Nullable="false" />
+          <Property Name="TypicalID" Type="int" Nullable="false" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <Association Name="FK_StudentTbl_ClassTbl">
+          <End Role="ClassTbl" Type="Self.ClassTbl" Multiplicity="0..1" />
+          <End Role="StudentTbl" Type="Self.StudentTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassTbl">
+              <PropertyRef Name="ClassID" />
+            </Principal>
+            <Dependent Role="StudentTbl">
+              <PropertyRef Name="ClassID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TypicalToStudent_Tbl_StudentTbl">
+          <End Role="StudentTbl" Type="Self.StudentTbl" Multiplicity="0..1" />
+          <End Role="TypicalToStudent_Tbl" Type="Self.TypicalToStudent_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentTbl">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="TypicalToStudent_Tbl">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TypicalToStudent_Tbl_TypicalTbl">
+          <End Role="TypicalTbl" Type="Self.TypicalTbl" Multiplicity="0..1" />
+          <End Role="TypicalToStudent_Tbl" Type="Self.TypicalToStudent_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypicalTbl">
+              <PropertyRef Name="TypicalID" />
+            </Principal>
+            <Dependent Role="TypicalToStudent_Tbl">
+              <PropertyRef Name="TypicalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="YeuditTablePlaceMentModelStoreContainer">
+          <EntitySet Name="ClassTbl" EntityType="Self.ClassTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="StudentTbl" EntityType="Self.StudentTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypicalTbl" EntityType="Self.TypicalTbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypicalToStudent_Tbl" EntityType="Self.TypicalToStudent_Tbl" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TypicalToStudentTbl" EntityType="Self.TypicalToStudentTbl" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [TypicalToStudentTbl].[StudentID] AS [StudentID], 
+    [TypicalToStudentTbl].[TypicalID] AS [TypicalID], 
+    [TypicalToStudentTbl].[Status] AS [Status]
+    FROM [dbo].[TypicalToStudentTbl] AS [TypicalToStudentTbl]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_StudentTbl_ClassTbl" Association="Self.FK_StudentTbl_ClassTbl">
+            <End Role="ClassTbl" EntitySet="ClassTbl" />
+            <End Role="StudentTbl" EntitySet="StudentTbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TypicalToStudent_Tbl_StudentTbl" Association="Self.FK_TypicalToStudent_Tbl_StudentTbl">
+            <End Role="StudentTbl" EntitySet="StudentTbl" />
+            <End Role="TypicalToStudent_Tbl" EntitySet="TypicalToStudent_Tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TypicalToStudent_Tbl_TypicalTbl" Association="Self.FK_TypicalToStudent_Tbl_TypicalTbl">
+            <End Role="TypicalTbl" EntitySet="TypicalTbl" />
+            <End Role="TypicalToStudent_Tbl" EntitySet="TypicalToStudent_Tbl" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="YeuditTablePlaceMentModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ClassTbl">
+          <Key>
+            <PropertyRef Name="ClassID" />
+          </Key>
+          <Property Name="ClassID" Type="Int32" Nullable="false" />
+          <Property Name="ClassNmae" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="StudentTbl" Relationship="Self.FK_StudentTbl_ClassTbl" FromRole="ClassTbl" ToRole="StudentTbl" />
+        </EntityType>
+        <EntityType Name="StudentTbl">
+          <Key>
+            <PropertyRef Name="StudentID" />
+          </Key>
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="FirstName" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Chatter" Type="Int32" />
+          <Property Name="AdviceableLine" Type="Int32" />
+          <Property Name="Coulnm" Type="Int32" />
+          <Property Name="Line" Type="Int32" />
+          <Property Name="ClassID" Type="Int32" />
+          <NavigationProperty Name="ClassTbl" Relationship="Self.FK_StudentTbl_ClassTbl" FromRole="StudentTbl" ToRole="ClassTbl" />
+          <NavigationProperty Name="TypicalToStudentTbl" Relationship="Self.FK_TypicalToStudentTbl_StudentTbl" FromRole="StudentTbl" ToRole="TypicalToStudentTbl" />
+          <NavigationProperty Name="TypicalToStudent_Tbl" Relationship="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_StudentTbl" FromRole="StudentTbl" ToRole="TypicalToStudent_Tbl" />
+        </EntityType>
+        <EntityType Name="TypicalTbl">
+          <Key>
+            <PropertyRef Name="TypicalID" />
+          </Key>
+          <Property Name="TypicalID" Type="Int32" Nullable="false" />
+          <Property Name="DetailTypical" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="TypicalToStudentTbl" Relationship="Self.FK_TypicalToStudentTbl_TypicalTbl" FromRole="TypicalTbl" ToRole="TypicalToStudentTbl" />
+          <NavigationProperty Name="TypicalToStudent_Tbl" Relationship="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_TypicalTbl" FromRole="TypicalTbl" ToRole="TypicalToStudent_Tbl" />
+        </EntityType>
+        <EntityType Name="TypicalToStudentTbl">
+          <Key>
+            <PropertyRef Name="StudentID" />
+            <PropertyRef Name="TypicalID" />
+          </Key>
+          <Property Name="StudentID" Type="Int32" Nullable="false" />
+          <Property Name="TypicalID" Type="Int32" Nullable="false" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="StudentTbl" Relationship="Self.FK_TypicalToStudentTbl_StudentTbl" FromRole="TypicalToStudentTbl" ToRole="StudentTbl" />
+          <NavigationProperty Name="TypicalTbl" Relationship="Self.FK_TypicalToStudentTbl_TypicalTbl" FromRole="TypicalToStudentTbl" ToRole="TypicalTbl" />
+        </EntityType>
+        <Association Name="FK_StudentTbl_ClassTbl">
+          <End Role="ClassTbl" Type="Self.ClassTbl" Multiplicity="0..1" />
+          <End Role="StudentTbl" Type="Self.StudentTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ClassTbl">
+              <PropertyRef Name="ClassID" />
+            </Principal>
+            <Dependent Role="StudentTbl">
+              <PropertyRef Name="ClassID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TypicalToStudentTbl_StudentTbl">
+          <End Role="StudentTbl" Type="Self.StudentTbl" Multiplicity="1" />
+          <End Role="TypicalToStudentTbl" Type="Self.TypicalToStudentTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentTbl">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="TypicalToStudentTbl">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TypicalToStudentTbl_TypicalTbl">
+          <End Role="TypicalTbl" Type="Self.TypicalTbl" Multiplicity="1" />
+          <End Role="TypicalToStudentTbl" Type="Self.TypicalToStudentTbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypicalTbl">
+              <PropertyRef Name="TypicalID" />
+            </Principal>
+            <Dependent Role="TypicalToStudentTbl">
+              <PropertyRef Name="TypicalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="YeuditTablePlaceMentEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ClassTbl" EntityType="Self.ClassTbl" />
+          <EntitySet Name="StudentTbl" EntityType="Self.StudentTbl" />
+          <EntitySet Name="TypicalTbl" EntityType="Self.TypicalTbl" />
+          <EntitySet Name="TypicalToStudentTbl" EntityType="Self.TypicalToStudentTbl" />
+          <AssociationSet Name="FK_StudentTbl_ClassTbl" Association="Self.FK_StudentTbl_ClassTbl">
+            <End Role="ClassTbl" EntitySet="ClassTbl" />
+            <End Role="StudentTbl" EntitySet="StudentTbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TypicalToStudentTbl_StudentTbl" Association="Self.FK_TypicalToStudentTbl_StudentTbl">
+            <End Role="StudentTbl" EntitySet="StudentTbl" />
+            <End Role="TypicalToStudentTbl" EntitySet="TypicalToStudentTbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TypicalToStudentTbl_TypicalTbl" Association="Self.FK_TypicalToStudentTbl_TypicalTbl">
+            <End Role="TypicalTbl" EntitySet="TypicalTbl" />
+            <End Role="TypicalToStudentTbl" EntitySet="TypicalToStudentTbl" />
+          </AssociationSet>
+          <EntitySet Name="sysdiagrams" EntityType="YeuditTablePlaceMentModel.sysdiagrams" />
+          <EntitySet Name="TypicalToStudent_Tbl" EntityType="YeuditTablePlaceMentModel.TypicalToStudent_Tbl" />
+          <AssociationSet Name="FK_TypicalToStudent_Tbl_StudentTbl" Association="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_StudentTbl">
+            <End Role="StudentTbl" EntitySet="StudentTbl" />
+            <End Role="TypicalToStudent_Tbl" EntitySet="TypicalToStudent_Tbl" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TypicalToStudent_Tbl_TypicalTbl" Association="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_TypicalTbl">
+            <End Role="TypicalTbl" EntitySet="TypicalTbl" />
+            <End Role="TypicalToStudent_Tbl" EntitySet="TypicalToStudent_Tbl" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="TypicalToStudent_Tbl">
+          <Key>
+            <PropertyRef Name="TypicalToStudentID" />
+          </Key>
+          <Property Name="TypicalToStudentID" Type="Int32" Nullable="false" />
+          <Property Name="StudentID" Type="Int32" />
+          <Property Name="TypicalID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="StudentTbl" Relationship="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_StudentTbl" FromRole="TypicalToStudent_Tbl" ToRole="StudentTbl" />
+          <NavigationProperty Name="TypicalTbl" Relationship="YeuditTablePlaceMentModel.FK_TypicalToStudent_Tbl_TypicalTbl" FromRole="TypicalToStudent_Tbl" ToRole="TypicalTbl" />
+        </EntityType>
+        <Association Name="FK_TypicalToStudent_Tbl_StudentTbl">
+          <End Type="YeuditTablePlaceMentModel.StudentTbl" Role="StudentTbl" Multiplicity="0..1" />
+          <End Type="YeuditTablePlaceMentModel.TypicalToStudent_Tbl" Role="TypicalToStudent_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="StudentTbl">
+              <PropertyRef Name="StudentID" />
+            </Principal>
+            <Dependent Role="TypicalToStudent_Tbl">
+              <PropertyRef Name="StudentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TypicalToStudent_Tbl_TypicalTbl">
+          <End Type="YeuditTablePlaceMentModel.TypicalTbl" Role="TypicalTbl" Multiplicity="0..1" />
+          <End Type="YeuditTablePlaceMentModel.TypicalToStudent_Tbl" Role="TypicalToStudent_Tbl" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TypicalTbl">
+              <PropertyRef Name="TypicalID" />
+            </Principal>
+            <Dependent Role="TypicalToStudent_Tbl">
+              <PropertyRef Name="TypicalID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="YeuditTablePlaceMentModelStoreContainer" CdmEntityContainer="YeuditTablePlaceMentEntities">
+          <EntitySetMapping Name="ClassTbl">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.ClassTbl">
+              <MappingFragment StoreEntitySet="ClassTbl">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="ClassNmae" ColumnName="ClassNmae" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="StudentTbl">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.StudentTbl">
+              <MappingFragment StoreEntitySet="StudentTbl">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="Chatter" ColumnName="Chatter" />
+                <ScalarProperty Name="AdviceableLine" ColumnName="AdviceableLine" />
+                <ScalarProperty Name="Coulnm" ColumnName="Coulnm" />
+                <ScalarProperty Name="Line" ColumnName="Line" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypicalTbl">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.TypicalTbl">
+              <MappingFragment StoreEntitySet="TypicalTbl">
+                <ScalarProperty Name="TypicalID" ColumnName="TypicalID" />
+                <ScalarProperty Name="DetailTypical" ColumnName="DetailTypical" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypicalToStudentTbl">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.TypicalToStudentTbl">
+              <MappingFragment StoreEntitySet="TypicalToStudentTbl">
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="TypicalID" ColumnName="TypicalID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="definition" ColumnName="definition" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TypicalToStudent_Tbl">
+            <EntityTypeMapping TypeName="YeuditTablePlaceMentModel.TypicalToStudent_Tbl">
+              <MappingFragment StoreEntitySet="TypicalToStudent_Tbl">
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="TypicalID" ColumnName="TypicalID" />
+                <ScalarProperty Name="StudentID" ColumnName="StudentID" />
+                <ScalarProperty Name="TypicalToStudentID" ColumnName="TypicalToStudentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
